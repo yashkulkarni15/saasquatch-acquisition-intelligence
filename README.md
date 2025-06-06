@@ -1,5 +1,3 @@
-# saasquatch-acquisition-intelligence
-
 # SaaSQuatch Acquisition Intelligence Platform
 
 Transform your lead generation tool into an intelligent acquisition sourcing platform that identifies businesses ready to sell.
