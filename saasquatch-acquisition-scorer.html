@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaaSQuatch Leads - Acquisition Intelligence</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            color: #1a1a1a;
+        }
+        
+        .header {
+            background: #fff;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #4f46e5;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.875rem;
+        }
+        
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #4f46e5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .filters {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .filter-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: end;
+        }
+        
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .filter-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #6b7280;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.875rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: #4f46e5;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #4338ca;
+        }
+        
+        .btn-export {
+            background: #10b981;
+            color: white;
+            margin-left: auto;
+        }
+        
+        .leads-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+        
+        .lead-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .lead-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .lead-header {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .company-info h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .company-details {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+        
+        .score-box {
+            text-align: center;
+            min-width: 80px;
+        }
+        
+        .score-circle {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 0.5rem;
+        }
+        
+        .score-hot {
+            background: #fef3c7;
+            color: #d97706;
+            border: 3px solid #f59e0b;
+        }
+        
+        .score-warm {
+            background: #dbeafe;
+            color: #2563eb;
+            border: 3px solid #3b82f6;
+        }
+        
+        .score-cold {
+            background: #e5e7eb;
+            color: #6b7280;
+            border: 3px solid #9ca3af;
+        }
+        
+        .score-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .metrics-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            padding: 1rem 1.5rem;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .metric {
+            text-align: center;
+            padding: 0.5rem;
+        }
+        
+        .metric-value {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #111827;
+        }
+        
+        .metric-label {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+        
+        .signals-section {
+            padding: 1.5rem;
+        }
+        
+        .signals-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        
+        .signal {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+        }
+        
+        .signal-positive {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .signal-warning {
+            background: #fed7aa;
+            color: #92400e;
+        }
+        
+        .signal-neutral {
+            background: #e5e7eb;
+            color: #374151;
+        }
+        
+        .signal-icon {
+            font-weight: bold;
+        }
+        
+        .card-actions {
+            padding: 1rem 1.5rem;
+            background: #f9fafb;
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .btn-small {
+            padding: 0.375rem 1rem;
+            font-size: 0.875rem;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .btn-outline {
+            background: #fff;
+            border: 1px solid #d1d5db;
+            color: #374151;
+        }
+        
+        .btn-outline:hover {
+            background: #f9fafb;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">SaaSQuatch Leads Pro</div>
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value" id="totalLeads">0</div>
+                <div>Total Targets</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="hotLeads">0</div>
+                <div>Hot Leads</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="avgScore">0</div>
+                <div>Avg Score</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="filters">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label class="filter-label">Acquisition Score</label>
+                    <select id="scoreFilter">
+                        <option value="">All Scores</option>
+                        <option value="hot">Hot (80+)</option>
+                        <option value="warm">Warm (50-79)</option>
+                        <option value="cold">Cold (&lt;50)</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Industry</label>
+                    <select id="industryFilter">
+                        <option value="">All Industries</option>
+                        <option value="SaaS">SaaS</option>
+                        <option value="E-commerce">E-commerce</option>
+                        <option value="Manufacturing">Manufacturing</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Professional Services">Professional Services</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Revenue Range</label>
+                    <select id="revenueFilter">
+                        <option value="">All Revenues</option>
+                        <option value="1-5">$1M - $5M</option>
+                        <option value="5-10">$5M - $10M</option>
+                        <option value="10-25">$10M - $25M</option>
+                        <option value="25+">$25M+</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="applyFilters()">Apply Filters</button>
+                <button class="btn btn-export" onclick="exportData()">Export to CSV</button>
+            </div>
+        </div>
+        
+        <div class="leads-grid" id="leadsGrid"></div>
+    </div>
+    
+    <script>
+        // Sample data - in production this would come from your data source
+        const acquisitionTargets = [
+            {
+                id: 1,
+                company: "CloudSync Solutions",
+                industry: "SaaS",
+                location: "Austin, TX",
+                employees: 85,
+                revenue: 12000000,
+                ebitda: 3600000,
+                yearFounded: 2015,
+                ownerAge: 58,
+                askingPrice: 48000000,
+                score: 92,
+                signals: [
+                    { type: 'positive', text: 'Owner approaching retirement age (58)' },
+                    { type: 'positive', text: '30% EBITDA margin - highly profitable' },
+                    { type: 'positive', text: 'Consistent 20% YoY growth' },
+                    { type: 'warning', text: 'High customer concentration (top 3 = 45%)' }
+                ]
+            },
+            {
+                id: 2,
+                company: "MedTech Innovations",
+                industry: "Healthcare",
+                location: "Boston, MA",
+                employees: 120,
+                revenue: 18000000,
+                ebitda: 2700000,
+                yearFounded: 2012,
+                ownerAge: 52,
+                askingPrice: 35000000,
+                score: 78,
+                signals: [
+                    { type: 'positive', text: 'Strong recurring revenue (85%)' },
+                    { type: 'positive', text: 'FDA approved products' },
+                    { type: 'neutral', text: 'Owner open to earnout structure' },
+                    { type: 'warning', text: 'Regulatory compliance costs increasing' }
+                ]
+            },
+            {
+                id: 3,
+                company: "Digital Commerce Pro",
+                industry: "E-commerce",
+                location: "Miami, FL",
+                employees: 45,
+                revenue: 8500000,
+                ebitda: 1700000,
+                yearFounded: 2018,
+                ownerAge: 42,
+                askingPrice: 12000000,
+                score: 65,
+                signals: [
+                    { type: 'positive', text: '20% EBITDA margin' },
+                    { type: 'neutral', text: 'Diversified product portfolio' },
+                    { type: 'warning', text: 'Heavy Amazon dependency (60%)' },
+                    { type: 'warning', text: 'Owner not ready to fully exit' }
+                ]
+            },
+            {
+                id: 4,
+                company: "Industrial Supply Co",
+                industry: "Manufacturing",
+                location: "Cleveland, OH",
+                employees: 200,
+                revenue: 32000000,
+                ebitda: 4800000,
+                yearFounded: 1998,
+                ownerAge: 65,
+                askingPrice: 38000000,
+                score: 88,
+                signals: [
+                    { type: 'positive', text: 'Owner ready for immediate sale (age 65)' },
+                    { type: 'positive', text: 'Strong management team in place' },
+                    { type: 'positive', text: 'Long-term contracts with Fortune 500' },
+                    { type: 'neutral', text: 'Equipment may need updates' }
+                ]
+            },
+            {
+                id: 5,
+                company: "TechServe Partners",
+                industry: "Professional Services",
+                location: "Denver, CO",
+                employees: 150,
+                revenue: 22000000,
+                ebitda: 3300000,
+                yearFounded: 2010,
+                ownerAge: 55,
+                askingPrice: 28000000,
+                score: 72,
+                signals: [
+                    { type: 'positive', text: 'Blue-chip client base' },
+                    { type: 'positive', text: '90% client retention rate' },
+                    { type: 'warning', text: 'Key employee dependency' },
+                    { type: 'neutral', text: 'Industry consolidation opportunity' }
+                ]
+            }
+        ];
+        
+        // Scoring algorithm for acquisition targets
+        function calculateAcquisitionScore(target) {
+            let score = 0;
+            
+            // Owner readiness (30 points)
+            if (target.ownerAge >= 60) score += 30;
+            else if (target.ownerAge >= 55) score += 20;
+            else if (target.ownerAge >= 50) score += 10;
+            
+            // Financial health (30 points)
+            const ebitdaMargin = (target.ebitda / target.revenue) * 100;
+            if (ebitdaMargin >= 25) score += 30;
+            else if (ebitdaMargin >= 20) score += 25;
+            else if (ebitdaMargin >= 15) score += 20;
+            else if (ebitdaMargin >= 10) score += 10;
+            
+            // Valuation reasonableness (20 points)
+            const multiple = target.askingPrice / target.ebitda;
+            if (multiple <= 4) score += 20;
+            else if (multiple <= 5) score += 15;
+            else if (multiple <= 6) score += 10;
+            else if (multiple <= 8) score += 5;
+            
+            // Business stability (20 points)
+            const businessAge = new Date().getFullYear() - target.yearFounded;
+            if (businessAge >= 10) score += 10;
+            else if (businessAge >= 5) score += 5;
+            
+            if (target.employees >= 50) score += 10;
+            else if (target.employees >= 20) score += 5;
+            
+            return Math.min(100, score);
+        }
+        
+        function getScoreClass(score) {
+            if (score >= 80) return 'hot';
+            if (score >= 50) return 'warm';
+            return 'cold';
+        }
+        
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(amount);
+        }
+        
+        function renderTargets(targets = acquisitionTargets) {
+            const grid = document.getElementById('leadsGrid');
+            grid.innerHTML = '';
+            
+            targets.forEach(target => {
+                const scoreClass = getScoreClass(target.score);
+                const ebitdaMargin = ((target.ebitda / target.revenue) * 100).toFixed(1);
+                const multiple = (target.askingPrice / target.ebitda).toFixed(1);
+                
+                const card = document.createElement('div');
+                card.className = 'lead-card';
+                card.innerHTML = `
+                    <div class="lead-header">
+                        <div class="company-info">
+                            <h3>${target.company}</h3>
+                            <div class="company-details">
+                                ${target.industry} • ${target.location} • ${target.employees} employees
+                            </div>
+                        </div>
+                        <div class="score-box">
+                            <div class="score-circle score-${scoreClass}">${target.score}</div>
+                            <div class="score-label">${scoreClass.toUpperCase()}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="metrics-row">
+                        <div class="metric">
+                            <div class="metric-value">${formatCurrency(target.revenue / 1000000)}M</div>
+                            <div class="metric-label">Revenue</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">${ebitdaMargin}%</div>
+                            <div class="metric-label">EBITDA Margin</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">${multiple}x</div>
+                            <div class="metric-label">Multiple</div>
+                        </div>
+                    </div>
+                    
+                    <div class="signals-section">
+                        <div class="signals-title">Acquisition Signals</div>
+                        ${target.signals.map(signal => `
+                            <div class="signal signal-${signal.type}">
+                                <span class="signal-icon">${
+                                    signal.type === 'positive' ? '✓' : 
+                                    signal.type === 'warning' ? '!' : '•'
+                                }</span>
+                                ${signal.text}
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="card-actions">
+                        <button class="btn btn-small btn-primary" onclick="contactSeller(${target.id})">
+                            Contact Seller
+                        </button>
+                        <button class="btn btn-small btn-outline" onclick="viewDetails(${target.id})">
+                            Full Analysis
+                        </button>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+            
+            updateStats(targets);
+        }
+        
+        function updateStats(targets) {
+            document.getElementById('totalLeads').textContent = targets.length;
+            document.getElementById('hotLeads').textContent = targets.filter(t => t.score >= 80).length;
+            document.getElementById('avgScore').textContent = Math.round(
+                targets.reduce((sum, t) => sum + t.score, 0) / targets.length
+            );
+        }
+        
+        function applyFilters() {
+            const scoreFilter = document.getElementById('scoreFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            const revenueFilter = document.getElementById('revenueFilter').value;
+            
+            let filtered = acquisitionTargets;
+            
+            if (scoreFilter) {
+                filtered = filtered.filter(target => {
+                    const scoreClass = getScoreClass(target.score);
+                    return scoreClass === scoreFilter;
+                });
+            }
+            
+            if (industryFilter) {
+                filtered = filtered.filter(target => target.industry === industryFilter);
+            }
+            
+            if (revenueFilter) {
+                filtered = filtered.filter(target => {
+                    const revM = target.revenue / 1000000;
+                    switch(revenueFilter) {
+                        case '1-5': return revM >= 1 && revM < 5;
+                        case '5-10': return revM >= 5 && revM < 10;
+                        case '10-25': return revM >= 10 && revM < 25;
+                        case '25+': return revM >= 25;
+                    }
+                });
+            }
+            
+            renderTargets(filtered);
+        }
+        
+        function contactSeller(id) {
+            const target = acquisitionTargets.find(t => t.id === id);
+            alert(`Initiating contact with ${target.company}...\n\nIn production, this would:\n- Generate personalized outreach email\n- Track engagement\n- Schedule follow-ups`);
+        }
+        
+        function viewDetails(id) {
+            const target = acquisitionTargets.find(t => t.id === id);
+            alert(`Full Analysis for ${target.company}:\n\n- Detailed financials\n- Management assessment\n- Market analysis\n- Risk factors\n- Suggested offer structure`);
+        }
+        
+        function exportData() {
+            // Simple CSV export
+            let csv = 'Company,Industry,Revenue,EBITDA,Score,Owner Age,Asking Price\n';
+            acquisitionTargets.forEach(t => {
+                csv += `"${t.company}","${t.industry}",${t.revenue},${t.ebitda},${t.score},${t.ownerAge},${t.askingPrice}\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'acquisition_targets.csv';
+            a.click();
+        }
+        
+        // Initialize
+        renderTargets();
+    </script>
+</body>
+</html>
