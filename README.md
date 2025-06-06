@@ -4,7 +4,7 @@ Transform your lead generation tool into an intelligent acquisition sourcing pla
 
 ## 🚀 Quick Start
 
-1. Open `index.html` in any modern web browser
+1. Open `saasquatch-acquisition-scorer.html` in any modern web browser
 2. Explore the pre-loaded acquisition targets
 3. Use filters to find specific opportunities
 4. Click "Contact Seller" to simulate outreach
@@ -54,13 +54,13 @@ The demo includes 5 realistic acquisition targets to showcase functionality:
 
 ## 🛠 Technical Implementation
 
-### Frontend (index.html)
+### Frontend (saasquatch-acquisition-scorer.html)
 - Pure JavaScript - no frameworks needed
 - Responsive design for all devices
 - Real-time filtering and sorting
 - CSV export functionality
 
-### Backend (acquisition_scorer.py) - Optional
+### Backend (acquisition-scorer-python.py) - Optional
 - Python-based scoring engine
 - Extensible data enrichment framework
 - API-ready architecture
