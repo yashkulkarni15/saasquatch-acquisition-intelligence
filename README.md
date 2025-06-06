@@ -98,6 +98,6 @@ Built for Caprae Capital's AI-Readiness Challenge to enhance their SaaSQuatch Le
 
 ---
 
-**Author**: [Your Name]
-**Date**: [Current Date]
+**Author**: Yash Kulkarni
+**Date**: 06 June 2025
 **Challenge**: Caprae Capital Internship - AI Enhancement
